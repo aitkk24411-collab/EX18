@@ -1,0 +1,41 @@
+<main>
+  <header>
+    <p class="eyebrow">BÀI 18 · JSON ARRAY MODEL</p>
+    <h1>Group Customers</h1>
+    <p>Danh sách khách hàng theo nhóm</p>
+  </header>
+
+  @if (loading()) {
+    <p role="status" class="message">Đang tải danh sách khách hàng…</p>
+  } @else if (errorMessage()) {
+    <div role="alert" class="message error">
+      <p>{{ errorMessage() }}</p>
+      <button type="button" (click)="loadCustomers()">Thử lại</button>
+    </div>
+  } @else if (groups().length === 0) {
+    <p role="status" class="message">Chưa có nhóm khách hàng.</p>
+  } @else {
+    <div class="table-scroll">
+      <table>
+        <caption>Khách hàng VIP và Normal</caption>
+        <thead>
+          <tr><th scope="col">Id</th><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Age</th><th scope="col" aria-label="Hình ảnh">#</th></tr>
+        </thead>
+        @for (group of groups(); track group.CustomerTypeId) {
+          <tbody>
+            <tr class="group-row"><th scope="rowgroup" colspan="5">{{ group.CustomerTypeId }} - {{ group.CustomterTypeName }}</th></tr>
+            @for (customer of group.Customers; track customer.Id) {
+              <tr class="customer-row">
+                <td class="customer-id">{{ customer.Id }}</td>
+                <td>{{ customer.Name }}</td>
+                <td><a [href]="'mailto:' + customer.Email">{{ customer.Email }}</a></td>
+                <td class="age">{{ customer.Age }}</td>
+                <td class="avatar"><img [src]="customer.Image" [alt]="'Ảnh đại diện ' + customer.Name" width="72" height="80"></td>
+              </tr>
+            }
+          </tbody>
+        }
+      </table>
+    </div>
+  }
+</main>
